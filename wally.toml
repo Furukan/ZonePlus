@@ -1,0 +1,11 @@
+[package]
+name = "furukan/zoneplus"
+version = "3.2.0"
+license = "MIT"
+description = "ForeverHD's ZonePlus packaged for Wally, with Luau types: zones that detect players, parts and items within their parts"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["sourcemap.json"]
+include = ["src", "wally.toml", "default.project.json", "LICENSE"]
+
+[dependencies]
