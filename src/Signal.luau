@@ -39,7 +39,7 @@ local function acquireRunnerThreadAndCallEventHandler(fn, ...)
 	freeRunnerThread = acquiredRunnerThread
 end
 
--- Coroutine runner that we create coroutines of. The coroutine can be 
+-- Coroutine runner that we create coroutines of. The coroutine can be
 -- repeatedly resumed with functions to run followed by the argument to run
 -- them with.
 local function runEventHandlerInFreeThread(...)
@@ -70,7 +70,7 @@ function Connection:Disconnect()
 	-- currently sitting on this node will be able to iterate forwards off of
 	-- it, but any subsequent fire calls will not hit it, and it will be GCed
 	-- when no more fire calls are sitting on it.
-    local signal = self._signal
+	local signal = self._signal
 	if signal._handlerListHead == self then
 		signal._handlerListHead = self._next
 	else
@@ -83,10 +83,10 @@ function Connection:Disconnect()
 		end
 	end
 
-    if signal.connectionsChanged then
+	if signal.connectionsChanged then
 		signal.totalConnections -= 1
-        signal.connectionsChanged:Fire(-1)
-    end
+		signal.connectionsChanged:Fire(-1)
+	end
 end
 
 -- Make Connection strict
@@ -96,7 +96,7 @@ setmetatable(Connection, {
 	end,
 	__newindex = function(tb, key, value)
 		error(("Attempt to set Connection::%s (not a valid member)"):format(tostring(key)), 2)
-	end
+	end,
 })
 
 -- Signal class
@@ -105,13 +105,13 @@ Signal.__index = Signal
 
 function Signal.new(createConnectionsChangedSignal)
 	local self = setmetatable({
-		_handlerListHead = false,	
+		_handlerListHead = false,
 	}, Signal)
-    if createConnectionsChangedSignal then
-        self.totalConnections = 0
+	if createConnectionsChangedSignal then
+		self.totalConnections = 0
 		self.connectionsChanged = Signal.new()
 	end
-    return self
+	return self
 end
 
 function Signal:Connect(fn)
@@ -124,7 +124,7 @@ function Signal:Connect(fn)
 	end
 
 	if self.connectionsChanged then
-        self.totalConnections += 1
+		self.totalConnections += 1
 		self.connectionsChanged:Fire(1)
 	end
 	return connection
@@ -135,7 +135,7 @@ end
 function Signal:DisconnectAll()
 	self._handlerListHead = false
 
-    if self.connectionsChanged then
+	if self.connectionsChanged then
 		self.connectionsChanged:Fire(-self.totalConnections)
 		self.connectionsChanged:Destroy()
 		self.connectionsChanged = nil
@@ -166,13 +166,12 @@ end
 -- a Signal:Connect() which disconnects itself.
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
-	local cn;
+	local cn
 	cn = self:Connect(function(...)
 		cn:Disconnect()
 		task.spawn(waitingCoroutine, ...)
 	end)
 	return coroutine.yield()
 end
-
 
 return Signal
