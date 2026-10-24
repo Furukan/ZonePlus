@@ -174,4 +174,16 @@ function Signal:Wait()
 	return coroutine.yield()
 end
 
+export type Connection = {
+	Disconnect: (self: Connection) -> (),
+}
+
+export type Signal<T...> = {
+	Connect: (self: Signal<T...>, fn: (T...) -> ()) -> Connection,
+	Wait: (self: Signal<T...>) -> T...,
+	Fire: (self: Signal<T...>, T...) -> (),
+	DisconnectAll: (self: Signal<T...>) -> (),
+	Destroy: (self: Signal<T...>) -> (),
+}
+
 return Signal

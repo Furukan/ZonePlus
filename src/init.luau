@@ -29,7 +29,7 @@ end
 Zone.enum = enum
 
 -- CONSTRUCTORS
-function Zone.new(container)
+function Zone.new(container: Container): Zone
 	local self = {}
 	setmetatable(self, Zone)
 
@@ -142,7 +142,7 @@ function Zone.new(container)
 	return self
 end
 
-function Zone.fromRegion(cframe, size)
+function Zone.fromRegion(cframe: CFrame, size: Vector3): Zone
 	local MAX_PART_SIZE = 2024
 	local container = Instance.new("Model")
 	local function createCube(cubeCFrame, cubeSize)
@@ -894,5 +894,64 @@ function Zone:destroy()
 	self.janitor:destroy()
 end
 Zone.Destroy = Zone.destroy
+
+-- TYPES
+export type Accuracy = "Low" | "Medium" | "High" | "Precise"
+
+export type Detection = "WholeBody" | "Centre"
+
+-- A BasePart, a holder of BaseParts such as a Model or a Folder, or an array of BaseParts.
+export type Container = Instance | { BasePart }
+
+-- A BasePart, or a character or NPC: a Model with a Humanoid and a HumanoidRootPart.
+export type Item = BasePart | Model
+
+export type Zone = {
+	accuracy: number,
+	autoUpdate: boolean,
+	respectUpdateQueue: boolean,
+	enterDetection: number,
+	exitDetection: number,
+	container: Container,
+	zoneParts: { BasePart },
+	region: Region3,
+	exactRegion: Region3,
+	volume: number,
+	boundMin: Vector3,
+	boundMax: Vector3,
+	zoneId: string,
+	worldModel: WorldModel | Workspace,
+
+	updated: Signal.Signal<>,
+	playerEntered: Signal.Signal<Player>,
+	playerExited: Signal.Signal<Player>,
+	localPlayerEntered: Signal.Signal<>,
+	localPlayerExited: Signal.Signal<>,
+	partEntered: Signal.Signal<BasePart>,
+	partExited: Signal.Signal<BasePart>,
+	itemEntered: Signal.Signal<Item>,
+	itemExited: Signal.Signal<Item>,
+
+	findLocalPlayer: (self: Zone) -> boolean,
+	findPlayer: (self: Zone, player: Player) -> boolean,
+	findItem: (self: Zone, item: Item) -> boolean,
+	findPart: (self: Zone, part: BasePart) -> (boolean, { BasePart }?),
+	findPoint: (self: Zone, positionOrCFrame: Vector3 | CFrame) -> (boolean, { BasePart }?),
+	getPlayers: (self: Zone) -> { Player },
+	getItems: (self: Zone) -> { Item },
+	getParts: (self: Zone) -> { BasePart },
+	getRandomPoint: (self: Zone) -> (Vector3, { BasePart }),
+	setAccuracy: (self: Zone, enumIdOrName: number | Accuracy) -> (),
+	setDetection: (self: Zone, enumIdOrName: number | Detection) -> (),
+	trackItem: (self: Zone, item: Item) -> (),
+	untrackItem: (self: Zone, item: Item) -> (),
+	bindToGroup: (self: Zone, settingsGroupName: string) -> (),
+	unbindFromGroup: (self: Zone) -> (),
+	relocate: (self: Zone) -> (),
+	onItemEnter: (self: Zone, item: Item, callback: () -> ()) -> (),
+	onItemExit: (self: Zone, item: Item, callback: () -> ()) -> (),
+	destroy: (self: Zone) -> (),
+	Destroy: (self: Zone) -> (),
+}
 
 return Zone
