@@ -1,3 +1,9 @@
+--[[
+ZonePlus by Ben Horton (ForeverHD), https://github.com/1ForeverHD/ZonePlus
+Copyright (c) 2021 Ben Horton, licensed under the MIT License; the full text is in this package's LICENSE file.
+Modified by Furukan, see https://github.com/Furukan/ZonePlus for the changes
+]]
+
 -- LOCAL
 local players = game:GetService("Players")
 local runService = game:GetService("RunService")
