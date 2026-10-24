@@ -191,6 +191,7 @@ function Janitor.__index:Get(Index)
 	if This then
 		return This[Index]
 	end
+	return nil
 end
 
 --[[**

@@ -32,6 +32,7 @@ function Enum.createEnum(enumName, details)
 			if index then
 				return details[index][1]
 			end
+			return nil
 		end,
 		getValue = function(nameOrProperty)
 			nameOrProperty = tostring(nameOrProperty)
@@ -42,6 +43,7 @@ function Enum.createEnum(enumName, details)
 			if index then
 				return details[index][2]
 			end
+			return nil
 		end,
 		getProperty = function(nameOrValue)
 			nameOrValue = tostring(nameOrValue)
@@ -52,30 +54,28 @@ function Enum.createEnum(enumName, details)
 			if index then
 				return details[index][3]
 			end
+			return nil
 		end,
 	}
 	for i, detail in pairs(details) do
 		assert(typeof(detail) == "table", ("bad argument #2.%s - details must only be comprised of tables!"):format(i))
 		local name = detail[1]
 		assert(typeof(name) == "string", ("bad argument #2.%s.1 - detail name must be a string!"):format(i))
-		assert(
-			typeof(not usedNames[name]),
-			("bad argument #2.%s.1 - the detail name '%s' already exists!"):format(i, name)
-		)
-		assert(typeof(not enumMetaFunctions[name]), ("bad argument #2.%s.1 - that name is reserved."):format(i, name))
+		assert(not usedNames[name], ("bad argument #2.%s.1 - the detail name '%s' already exists!"):format(i, name))
+		assert(not enumMetaFunctions[name], ("bad argument #2.%s.1 - the name '%s' is reserved."):format(i, name))
 		usedNames[tostring(name)] = i
 		local value = detail[2]
 		local valueString = tostring(value)
 		--assert(typeof(value) == "number" and math.ceil(value)/value == 1, ("bad argument #2.%s.2 - detail value must be an integer!"):format(i))
 		assert(
-			typeof(not usedValues[valueString]),
+			not usedValues[valueString],
 			("bad argument #2.%s.2 - the detail value '%s' already exists!"):format(i, valueString)
 		)
 		usedValues[valueString] = i
 		local property = detail[3]
 		if property then
 			assert(
-				typeof(not usedProperties[property]),
+				not usedProperties[tostring(property)],
 				("bad argument #2.%s.3 - the detail property '%s' already exists!"):format(i, tostring(property))
 			)
 			usedProperties[tostring(property)] = i

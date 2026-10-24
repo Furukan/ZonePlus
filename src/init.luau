@@ -182,6 +182,7 @@ function Zone:_calculateRegion(tableOfParts, dontRound)
 			elseif boundType == "Max" then
 				return (v >= currentValue)
 			end
+			return false
 		end
 		function details:parse(valuesToParse)
 			for i, v in pairs(valuesToParse) do
