@@ -336,9 +336,9 @@ function Zone:_update()
 	end
 	local partProperties = { "Size", "Position" }
 	local function verifyDefaultCollision(instance)
-		if instance.CollisionGroupId ~= 0 then
+		if instance.CollisionGroup ~= "Default" then
 			error(
-				"Zone parts must belong to the 'Default' (0) CollisionGroup! Consider using zone:relocate() if you wish to move zones outside of workspace to prevent them interacting with other parts."
+				"Zone parts must belong to the 'Default' CollisionGroup! Consider using zone:relocate() if you wish to move zones outside of workspace to prevent them interacting with other parts."
 			)
 		end
 	end
@@ -348,7 +348,7 @@ function Zone:_update()
 		end
 		verifyDefaultCollision(part)
 		self._updateConnections:add(
-			part:GetPropertyChangedSignal("CollisionGroupId"):Connect(function()
+			part:GetPropertyChangedSignal("CollisionGroup"):Connect(function()
 				verifyDefaultCollision(part)
 			end),
 			"Disconnect"

@@ -426,7 +426,7 @@ function ZoneController.getTouchingZones(item, onlyActiveZones, recommendedDetec
 	local partToZoneDict = (onlyActiveZones and activePartToZone) or allPartToZone
 
 	local boundParams = OverlapParams.new()
-	boundParams.FilterType = Enum.RaycastFilterType.Whitelist
+	boundParams.FilterType = Enum.RaycastFilterType.Include
 	boundParams.MaxParts = #partsTable
 	boundParams.FilterDescendantsInstances = partsTable
 
@@ -454,7 +454,7 @@ function ZoneController.getTouchingZones(item, onlyActiveZones, recommendedDetec
 	local precisePartsCount = 0
 	if totalRemainingBoundParts > 0 then
 		local preciseParams = OverlapParams.new()
-		preciseParams.FilterType = Enum.RaycastFilterType.Whitelist
+		preciseParams.FilterType = Enum.RaycastFilterType.Include
 		preciseParams.MaxParts = totalRemainingBoundParts
 		preciseParams.FilterDescendantsInstances = boundPartsThatRequirePreciseChecks
 
